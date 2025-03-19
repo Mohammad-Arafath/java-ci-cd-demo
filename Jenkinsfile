@@ -9,8 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/Mohammad-Arafath/java-ci-cd-demo.git'
-            }
+                git branch: 'main', url: 'https://github.com/Mohammad-Arafath/java-ci-cd-demo.git'            }
         }
 
         stage('Build Java Application') {
