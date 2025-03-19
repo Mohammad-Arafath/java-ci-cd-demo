@@ -9,6 +9,9 @@
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <!-- Add SonarQube properties here -->
+        <sonar.host.url>http://localhost:9000</sonar.host.url> <!-- Update with your SonarQube URL -->
+        <sonar.login>squ_aa0e7edf2c835eab73be4c94d9c57e73b8e01406</sonar.login> <!-- Update with your SonarQube authentication token -->
     </properties>
 
     <dependencies>
@@ -41,7 +44,13 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
             </plugin>
+
+            <!-- SonarQube Maven Plugin -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>4.0.0.4121</version>
+            </plugin>
         </plugins>
     </build>
 </project>
-
