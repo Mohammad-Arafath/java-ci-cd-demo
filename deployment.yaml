@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: java-ci-cd-demo
+  namespace: default  # Optional: Specify a namespace if needed
   labels:
     app: java-ci-cd-demo
 spec:
@@ -17,21 +18,42 @@ spec:
       containers:
         - name: java-ci-cd-demo
           image: mzamankhan1/java-ci-cd-demo:latest  # Use your Docker Hub image
+          imagePullPolicy: Always  # Always pull the latest image
           ports:
             - containerPort: 8080  # Application port
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "production"  # Set environment variables if needed
+          resources:
+            requests:
+              memory: "512Mi"  # Request 512Mi of memory
+              cpu: "500m"       # Request 500m CPU
+            limits:
+              memory: "1Gi"     # Limit to 1Gi of memory
+              cpu: "1"          # Limit to 1 CPU
+          livenessProbe:
+            httpGet:
+              path: /actuator/health  # Spring Boot Actuator health endpoint
+              port: 8080
+            initialDelaySeconds: 30  # Wait 30 seconds before starting probes
+            periodSeconds: 10        # Check every 10 seconds
+          readinessProbe:
+            httpGet:
+              path: /actuator/health  # Spring Boot Actuator health endpoint
+              port: 8080
+            initialDelaySeconds: 30  # Wait 30 seconds before starting probes
+            periodSeconds: 10        # Check every 10 seconds
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: java-ci-cd-demo-service
+  namespace: default  # Optional: Specify a namespace if needed
 spec:
   selector:
     app: java-ci-cd-demo
   ports:
     - protocol: TCP
-      port: 80
+      port: 80        # External port
       targetPort: 8080  # Match the container port
-  type: LoadBalancer  # Change to NodePort if using a local cluster
+  type: LoadBalancer  # Use NodePort for local clusters (e.g., Minikube)
