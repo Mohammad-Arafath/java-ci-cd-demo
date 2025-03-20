@@ -35,7 +35,7 @@ pipeline {
             agent {
                 docker {
                     image 'docker:latest' // Use the official Docker image
-                    args '--privileged' // Run the container in privileged mode
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount the Docker socket
                 }
             }
             steps {
@@ -52,7 +52,7 @@ pipeline {
             agent {
                 docker {
                     image 'docker:latest' // Use the official Docker image
-                    args '--privileged' // Run the container in privileged mode
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount the Docker socket
                 }
             }
             steps {
