@@ -27,21 +27,16 @@ pipeline {
 
         stage('Analyze Code with SonarQube') {
             steps {
-                sh 'mvn sonar:sonar -Dsonar.host.url=$SONARQUBE_URL'
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
+                    sh 'mvn sonar:sonar -Dsonar.host.url=$SONARQUBE_URL -Dsonar.login=$SONAR_TOKEN'
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Ensure Docker permissions
-                    sh 'mkdir -p ~/.docker && chmod 777 ~/.docker'
-
-                    // Verify Docker access
-                    sh 'docker ps'
-
-                    // Build the Docker image
-                    sh 'docker build --no-cache -t ${DOCKER_IMAGE} .'
+                    sh 'docker build --no-cache -t "$DOCKER_IMAGE" .'
                 }
             }
         }
@@ -49,14 +44,16 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
-                    sh 'docker push ${DOCKER_IMAGE}'
+                    sh 'docker push "$DOCKER_IMAGE"'
                 }
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f deployment.yaml --validate=false'
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh 'kubectl apply -f deployment.yaml --validate=false'
+                }
             }
         }
     }
