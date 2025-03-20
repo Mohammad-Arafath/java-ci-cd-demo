@@ -9,7 +9,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/Mohammad-Arafath/java-ci-cd-demo.git'            }
+                git branch: 'main', url: 'https://github.com/Mohammad-Arafath/java-ci-cd-demo.git'
+            }
         }
 
         stage('Build Java Application') {
@@ -31,12 +32,24 @@ pipeline {
         }
 
         stage('Build Docker Image') {
+            agent {
+                docker {
+                    image 'docker:latest' // Use the official Docker image
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount the Docker socket
+                }
+            }
             steps {
                 sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
 
         stage('Push to Docker Hub') {
+            agent {
+                docker {
+                    image 'docker:latest' // Use the official Docker image
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount the Docker socket
+                }
+            }
             steps {
                 withDockerRegistry([credentialsId: 'docker-hub-credentials', url: 'https://index.docker.io/v1/']) {
                     sh 'docker push $DOCKER_IMAGE'
@@ -51,4 +64,3 @@ pipeline {
         }
     }
 }
-
