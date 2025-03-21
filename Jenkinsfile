@@ -50,7 +50,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                    sh 'kubectl apply -f deployment.yaml --validate=false'
+                    sh 'export KUBECONFIG=$HOME/.kube/config && kubectl apply -f deployment.yaml --validate=false'
                 }
             }
         }
