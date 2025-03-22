@@ -11,7 +11,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <!-- Add SonarQube properties here -->
         <sonar.host.url>http://localhost:9000</sonar.host.url> <!-- Update with your SonarQube URL -->
-        <sonar.login>squ_aa0e7edf2c835eab73be4c94d9c57e73b8e01406</sonar.login> <!-- Update with your SonarQube authentication token -->
+        <sonar.login>squ_808b10a0f60986da883f322dbbc18852fbbcf8b6</sonar.login> <!-- Update with your SonarQube authentication token -->
     </properties>
 
     <dependencies>
