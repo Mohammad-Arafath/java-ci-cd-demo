@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_URL = 'http://localhost:9000'
+        SONARQUBE_URL = 'http://192.168.229.128:9000'
         DOCKER_IMAGE = 'mzamankhan1/java-ci-cd-demo:latest'
     }
 
