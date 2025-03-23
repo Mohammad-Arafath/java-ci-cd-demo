@@ -27,7 +27,7 @@ pipeline {
 
         stage('Analyze Code with SonarQube') {
             steps {
-                sh 'mvn sonar:sonar -Dsonar.host.url=$SONARQUBE_URL'
+                sh 'mvn sonar:sonar -Dsonar.host.url=$SONARQUBE_URL' -Dsonar.login=squ_ce888b9aee12fc77551f8f985fce18b5e7b390fc'
             }
         }
 
